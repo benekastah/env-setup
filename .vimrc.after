@@ -1,0 +1,44 @@
+" Plugins
+Bundle 'paradigm/vim-multicursor'
+
+" Plugins from yadr that I will keep when I get rid of yadr
+" Bundle 'scrooloose/syntastic'
+" Bundle 'scrooloose/nerdtree.git'
+" Bundle 'sjl/gundo.vim'
+" Bundle 'vim-scripts/sudo.vim'
+" Bundle 'jistr/vim-nerdtree-tabs.git'
+" Bundle 'tjennings/git-grep-vim'
+" Bundle 'mileszs/ack.vim'
+" Bundle 'skwp/greplace.vim'
+
+" Local plugins
+source ~/Documents/mysql.vim/plugin/mysql.vim
+" MySql setup
+call MySql#auth('minted_dev', 'minted_dev')
+
+set colorcolumn=80
+" Doesn't do anything when using powerline
+set ruler
+call Pl#Theme#InsertSegment('lineinfo', 'after', 'fugitive:branch')
+
+set sw=2
+set expandtab
+autocmd BufWritePre * :%s/\s\+$//e
+
+" Search for selected text, forwards or backwards.
+vnoremap <silent> <C-S> :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> <C-A> :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
+augroup paulh
+  autocmd!
+  " Make sure .tpl.php files operate in phtml mode.
+  autocmd BufNewFile,BufRead,BufFilePost *.tpl.php :set ft=phtml
+augroup END
